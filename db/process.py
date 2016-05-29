@@ -16,9 +16,9 @@ def write_data(csvfile, conn):
                 "INSERT INTO ntpc_stops"
                 "(name, location, route, direction)"
                 "VALUES (%s, ST_SetSRID(ST_MakePoint(%s, %s), 4326), %s, %s);",
-                (row["Station_nameZh"], row["Station_longitude"],
-                 row["Station_latitude"], row["Route_nameZh"],
-                 row["Station_goBack"]))
+                (row["stationNameZh"], row["longitude"],
+                 row["latitude"], row["routeNameZh"],
+                 row["goBack"]))
             count += 1
         print "%d stops added" % count
         print "Calculating groups..."
@@ -44,7 +44,7 @@ zip_content = requests.get(NTPC + zip_url).content
 print "Extracting..."
 with ZipFile(StringIO(zip_content), "r") as zip_file:
     with zip_file.open(zip_file.infolist()[0].filename) as csvfile, \
-         psycopg2.connect(dbname="postgres", user="postgres", host="db") \
+         psycopg2.connect(dbname="postgres", user="postgres", host="localhost") \
          as conn:
         print "Writing..."
         write_data(csvfile, conn)
